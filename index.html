@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tempahan Surau al-Nur</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="16x16" href="./icons/app-icon-32.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./icons/app-icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/app-icon-192.png">
+<link rel="shortcut icon" href="./icons/app-icon-32.png">
+<link rel="apple-touch-icon" sizes="192x192" href="./icons/app-icon-192.png">
+<meta name="theme-color" content="#2e7d32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg: #f6f3ee;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: #e6e1d9;
+    --brand: #1f6b4f;
+    --brand-dark: #16513c;
+    --booked: #d95f5f;
+    --available: #2f8f68;
+    --shadow: 0 14px 36px rgba(21, 32, 24, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at 10% 0%, #f0ebe2 0%, transparent 45%),
+      radial-gradient(circle at 95% 15%, #ece8e0 0%, transparent 35%),
+      var(--bg);
+    min-height: 100vh;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: 0.02em;
+    color: #163b2d;
+  }
+
+  .hero p {
+    margin: 0.25rem 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .install-wrap {
+    margin-top: 0.9rem;
+  }
+
+  .btn-install {
+    border: 1px solid #c9ded2;
+    background: #fff;
+    color: var(--brand);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-radius: 999px;
+    padding: 0.5rem 0.95rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 120ms ease, background-color 120ms ease;
+  }
+
+  .btn-install:hover {
+    border-color: #9fb9ad;
+    background-color: #f3faf6;
+  }
+
+  .btn-install[disabled] {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .install-hint {
+    margin: 0.45rem 0 0;
+    color: var(--muted);
+    font-size: 0.84rem;
+  }
+
+  .layout {
+    display: grid;
+    gap: 1.1rem;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: start;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    padding: 1.25rem;
+  }
+
+  .card h2 {
+    margin: 0 0 0.85rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #213229;
+  }
+
+  .form-grid {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .input,
+  .select {
+    width: 100%;
+    border: 1px solid #d9d3c8;
+    border-radius: 0.7rem;
+    padding: 0.7rem 0.85rem;
+    font-size: 1rem;
+    color: #2f3a34;
+    background: #fff;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+  }
+
+  .input:focus,
+  .select:focus {
+    outline: none;
+    border-color: #9fb9ad;
+    box-shadow: 0 0 0 3px rgba(31, 107, 79, 0.12);
+  }
+
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    border: 0;
+    border-radius: 0.75rem;
+    padding: 0.78rem 1rem;
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: transform 120ms ease, opacity 120ms ease;
+  }
+
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); opacity: 0.95; }
+
+  .calendar-hint {
+    margin: 0 0 0.85rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  #calendar {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .calendar-day {
+    border-radius: 0.7rem;
+    padding: 0.6rem 0.35rem;
+    text-align: center;
+    font-size: 0.86rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: default;
+    user-select: none;
+  }
+
+  .booked {
+    background-color: #f8e0e0;
+    color: #8e2d2d;
+    border-color: #efc7c7;
+  }
+
+  .available {
+    background-color: #e3f3ec;
+    color: #1f6b4f;
+    border-color: #cde7dc;
+  }
+
+  @media (min-width: 1200px) {
+    .layout { gap: 1.35rem; }
+    .card { padding: 1.4rem; }
+  }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    body { padding-top: 1.25rem; }
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 1rem 0.75rem 2rem; }
+    .hero { margin-bottom: 0.9rem; }
+    .hero p { font-size: 0.9rem; }
+    .card {
+      border-radius: 0.9rem;
+      padding: 1rem;
+    }
+    .card h2 { margin-bottom: 0.7rem; }
+    .row-2 { grid-template-columns: 1fr; }
+    #calendar { gap: 0.45rem; }
+    .calendar-day {
+      padding: 0.52rem 0.2rem;
+      font-size: 0.8rem;
+    }
+    .btn-primary { padding: 0.8rem 1rem; }
+  }
+
+  @media (max-width: 380px) {
+    .hero h1 { font-size: 1.9rem; }
+    .calendar-day { font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<main class="page">
+  <header class="hero">
+    <h1>Tempahan Surau al-Nur</h1>
+    <p>Sistem tempahan ringkas, kemas dan teratur</p>
+    <div class="install-wrap">
+      <button id="installBtn" type="button" class="btn-install">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 18h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="installBtnLabel">Install App</span>
+      </button>
+      <p id="installHint" class="install-hint">Jika butang ini tidak buka popup, guna menu browser untuk install app.</p>
+    </div>
+  </header>
+
+  <section class="layout">
+    <article class="card">
+      <h2>Borang Tempahan Baru</h2>
+      <form id="bookingForm" class="form-grid">
+        <input type="text" id="nama" placeholder="Nama Penuh" required class="input">
+        <input type="text" id="unit" placeholder="Kelas / Unit" required class="input">
+        <input type="date" id="tarikh" required class="input">
+        <div class="row-2">
+          <select id="jamDari" required class="select"></select>
+          <select id="jamHingga" required class="select"></select>
+        </div>
+        <input type="text" id="tujuan" placeholder="Tujuan Aktiviti" required class="input">
+        <input type="email" id="email" placeholder="Emel (untuk notifikasi)" required class="input">
+        <button type="submit" class="btn-primary">Hantar Tempahan</button>
+      </form>
+    </article>
+
+    <article class="card">
+      <h2>Calendar Tempahan</h2>
+      <p class="calendar-hint">Hijau: slot tersedia | Merah: slot bertindih</p>
+      <div id="calendar"></div>
+    </article>
+  </section>
+</main>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxLFxmvUNt3js9Mdi0XfxoXIDQujQ5zpOE1CClZR6XL5gnlBtXm-g8-NEo3TUn-GnAv/exec";
+
+// Generate jam dari 07:30 sampai 22:30 tiap 30 minit
+function binaPilihanMasa() {
+  const jamDari = document.getElementById('jamDari');
+  const jamHingga = document.getElementById('jamHingga');
+  let times = [];
+  for (let totalMin = 450; totalMin <= 1350; totalMin += 30) {
+    const h = String(Math.floor(totalMin/60)).padStart(2,'0');
+    const m = String(totalMin%60).padStart(2,'0');
+    times.push(`${h}:${m}`);
+  }
+  jamDari.innerHTML = times.map(t=>`<option value="${t}">${t}</option>`).join('');
+  jamHingga.innerHTML = times.map(t=>`<option value="${t}">${t}</option>`).join('');
+  jamDari.value = "07:30";
+  jamHingga.value = "08:30";
+}
+binaPilihanMasa();
+
+// Fetch tempahan dari apps script
+let bookings = [];
+function formatDateLocal(dateObj){
+  const y = dateObj.getFullYear();
+  const m = String(dateObj.getMonth()+1).padStart(2,'0');
+  const d = String(dateObj.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+
+function normalizeBookingDate(rawDate){
+  if (!rawDate) return "";
+
+  // Jika sudah format YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) return rawDate;
+
+  // Jika format DD/MM/YYYY
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(rawDate)) {
+    const [d, m, y] = rawDate.split('/');
+    return `${y}-${m}-${d}`;
+  }
+
+  // Jika ISO datetime (contoh 2026-03-25T16:00:00.000Z)
+  const dt = new Date(rawDate);
+  if (!Number.isNaN(dt.getTime())) return formatDateLocal(dt);
+
+  return String(rawDate);
+}
+
+function timeToMinutes(hhmm) {
+  if (!hhmm || !/^\d{2}:\d{2}$/.test(hhmm)) return NaN;
+  const [h, m] = hhmm.split(':').map(Number);
+  return (h * 60) + m;
+}
+
+function parseSlotRange(slotRaw) {
+  if (!slotRaw) return null;
+  const match = String(slotRaw).match(/(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/);
+  if (!match) return null;
+  const startMin = timeToMinutes(match[1]);
+  const endMin = timeToMinutes(match[2]);
+  if (Number.isNaN(startMin) || Number.isNaN(endMin)) return null;
+  return { startMin, endMin };
+}
+
+function hasTimeOverlap(startA, endA, startB, endB) {
+  return startA < endB && startB < endA;
+}
+
+function isDateTimeConflict(dateYmd, startTime, endTime) {
+  if (!dateYmd || !startTime || !endTime) return false;
+  const selectedStart = timeToMinutes(startTime);
+  const selectedEnd = timeToMinutes(endTime);
+  if (Number.isNaN(selectedStart) || Number.isNaN(selectedEnd)) return false;
+
+  return bookings.some(b => {
+    if (normalizeBookingDate(b.tarikh) !== dateYmd) return false;
+    const slot = parseSlotRange(b.slot);
+    if (!slot) return true; // fallback untuk rekod lama tanpa slot sah
+    return hasTimeOverlap(selectedStart, selectedEnd, slot.startMin, slot.endMin);
+  });
+}
+
+async function fetchBookings() {
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+    bookings = Array.isArray(data) ? data : [];
+    renderCalendar();
+    validateSelectedDateAvailability();
+  } catch(e) {
+    console.error("Gagal fetch bookings", e);
+    bookings = [];
+    renderCalendar();
+    validateSelectedDateAvailability();
+  }
+}
+
+// Render calendar hijau/merah
+function renderCalendar() {
+  const calDiv = document.getElementById('calendar');
+  calDiv.innerHTML = "";
+  const today = new Date();
+  const jamDari = document.getElementById('jamDari').value;
+  const jamHingga = document.getElementById('jamHingga').value;
+
+  for(let i=0;i<14;i++){ // 2 minggu
+    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate()+i);
+    const dStr = formatDateLocal(d); // YYYY-MM-DD (local timezone)
+    const dayDiv = document.createElement('div');
+    dayDiv.className = "calendar-day";
+    dayDiv.innerText = `${d.getDate()}/${d.getMonth()+1}`;
+    const hasBooking = isDateTimeConflict(dStr, jamDari, jamHingga);
+    dayDiv.classList.add(hasBooking ? "booked" : "available");
+    calDiv.appendChild(dayDiv);
+  }
+}
+
+function validateSelectedDateAvailability() {
+  const tarikhInput = document.getElementById('tarikh');
+  const selectedDate = tarikhInput.value;
+  const jamDari = document.getElementById('jamDari').value;
+  const jamHingga = document.getElementById('jamHingga').value;
+  if (!selectedDate) return true;
+
+  if (isDateTimeConflict(selectedDate, jamDari, jamHingga)) {
+    tarikhInput.setCustomValidity("Slot masa ini sudah bertindih dengan tempahan lain.");
+    return false;
+  }
+
+  tarikhInput.setCustomValidity("");
+  return true;
+}
+
+// Form submit
+document.getElementById('bookingForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const jamDari = document.getElementById('jamDari').value;
+  const jamHingga = document.getElementById('jamHingga').value;
+  if(jamHingga<=jamDari){ alert("Jam Hingga mesti selepas Jam Dari"); return; }
+  if (!validateSelectedDateAvailability()) {
+    alert("Slot masa ini bertindih dengan tempahan sedia ada. Sila pilih masa lain.");
+    return;
+  }
+  const payload = {
+    nama: document.getElementById('nama').value,
+    unit: document.getElementById('unit').value,
+    tarikh: document.getElementById('tarikh').value.split('-').reverse().join('/'),
+    slot: `${jamDari} - ${jamHingga}`,
+    tujuan: document.getElementById('tujuan').value,
+    email: document.getElementById('email').value
+  };
+  try {
+    const res = await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
+    const data = await res.json();
+    if(data.result==="error"){ alert(data.message); return; }
+    alert("Tempahan berjaya!");
+    document.getElementById('bookingForm').reset();
+    binaPilihanMasa();
+    fetchBookings();
+  } catch(err){
+    alert("Ralat berlaku, sila cuba lagi."); console.error(err);
+  }
+});
+
+document.getElementById('jamDari').addEventListener('change', renderCalendar);
+document.getElementById('jamHingga').addEventListener('change', renderCalendar);
+document.getElementById('jamDari').addEventListener('change', validateSelectedDateAvailability);
+document.getElementById('jamHingga').addEventListener('change', validateSelectedDateAvailability);
+document.getElementById('tarikh').addEventListener('change', () => {
+  if (!validateSelectedDateAvailability()) {
+    alert("Slot masa ini sudah bertindih untuk tarikh dipilih.");
+  }
+});
+fetchBookings();
+
+let deferredInstallPrompt = null;
+const installBtn = document.getElementById('installBtn');
+const installBtnLabel = document.getElementById('installBtnLabel');
+const installHint = document.getElementById('installHint');
+
+function isStandaloneMode() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function updateInstallUi() {
+  if (isStandaloneMode()) {
+    installBtn.hidden = true;
+    installHint.textContent = "App sudah dipasang pada peranti ini.";
+    return;
+  }
+
+  installBtn.hidden = false;
+  installBtn.disabled = false;
+
+  if (deferredInstallPrompt) {
+    installBtnLabel.textContent = "Install App";
+    installHint.textContent = "Tekan butang untuk install terus.";
+    return;
+  }
+
+  installBtnLabel.textContent = "Cara Install App";
+  installHint.textContent = "Popup auto mungkin tak disokong. Tekan butang untuk lihat langkah manual.";
+}
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  updateInstallUi();
+});
+
+installBtn.addEventListener('click', async () => {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    const choiceResult = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    if (choiceResult.outcome === 'accepted') {
+      installBtn.hidden = true;
+      installHint.textContent = "Pemasangan diterima.";
+      return;
+    }
+    updateInstallUi();
+    return;
+  }
+
+  alert("Cara manual install:\n1) Buka menu browser (ikon tiga titik / Share)\n2) Pilih 'Install app' atau 'Add to Home Screen'\n3) Sahkan pemasangan.");
+});
+
+window.addEventListener('appinstalled', () => {
+  installBtn.hidden = true;
+  deferredInstallPrompt = null;
+  installHint.textContent = "App berjaya dipasang.";
+});
+
+window.addEventListener('load', updateInstallUi);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js?v=11').catch(err => {
+      console.error('Service worker registration failed:', err);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
+
+
+
